@@ -53,7 +53,7 @@
                      Key="Directory\Background\shell\AESxWin"
               Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Value="Encrypt\Decrypt with AESxWin" KeyPath="yes"/>
-          <RegistryValue Type="string" Name="icon" Value="[INSTALLFOLDER]AESxWin.exe"/>
+          <RegistryValue Type="string" Name="Icon" Value="[INSTALLFOLDER]AESxWin.exe"/>
         </RegistryKey>
         <RegistryKey Root="HKCR"
                      Key="Directory\Background\shell\AESxWin\command"
@@ -64,7 +64,7 @@
                      Key="Directory\shell\AESxWin"
               Action="createAndRemoveOnUninstall">
           <RegistryValue Type="string" Value="Encrypt\Decrypt with AESxWin"/>
-          <RegistryValue Type="string" Name="icon" Value="[INSTALLFOLDER]AESxWin.exe"/>
+          <RegistryValue Type="string" Name="Icon" Value="[INSTALLFOLDER]AESxWin.exe"/>
         </RegistryKey>
         <RegistryKey Root="HKCR"
                      Key="Directory\shell\AESxWin\command"

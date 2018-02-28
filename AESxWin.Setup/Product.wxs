@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define AESxWin_TargetDir=$(var.AESxWin.TargetDir)?>
+  <Product Id="fc66cf78-8c9c-4e34-a814-5a5ba08d4aad" Name="AESxWin" Language="1033" Version="1.0.0.0" Manufacturer="NinjaBotsFactory" UpgradeCode="4b282d3c-a6bf-4642-831f-4916768d3146">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <UIRef Id="WixUI_Minimal" />
+    <Icon Id="Icon.ico" SourceFile="$(var.ProjectDir)Icon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="Icon.ico" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\License.rtf" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes"/>
+
+    <Feature Id="ProductFeature" Title="AESxWin" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="ApplicationShortcut" />
+      <ComponentRef Id="ApplicationShortcutDesktop" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="AESxWin" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="AESxWin"/>
+      </Directory>
+      <Directory Id="DesktopFolder" Name="Desktop"/>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcut" Guid="6d755cf5-0662-4478-8c1f-81dadf29b34b">
+        <Shortcut Id="ApplicationStartMenuShortcut" Name="AESxWin" Description="AESxWin" Target="[INSTALLFOLDER]AESxWin.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\AESxWin" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="ApplicationShortcutDesktop" Guid="e4c2bea8-b1a5-4923-8919-f79691716551">
+        <Shortcut Id="ApplicationDesktopShortcut" Name="AESxWin" Description="AESxWin" Target="[INSTALLFOLDER]AESxWin.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\AESxWin" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="AESxWin.exe" Guid="7de61a33-b097-454e-8dc1-cf5fd3d87a70">
+        <File Id="AESxWin.exe" Name="AESxWin.exe" Source="$(var.AESxWin_TargetDir)AESxWin.exe" />
+      </Component>
+      <Component Id="AESxWin.exe.config" Guid="5c6353a8-8535-4761-bccf-e1cf5b581b32">
+        <File Id="AESxWin.exe.config" Name="AESxWin.exe.config" Source="$(var.AESxWin_TargetDir)AESxWin.exe.config" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

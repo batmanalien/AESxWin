@@ -16,6 +16,7 @@
       <ComponentGroupRef Id="ProductComponents" />
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="ApplicationShortcutDesktop" />
+      <ComponentRef Id="RegistryEntries" />
     </Feature>
   </Product>
 
@@ -46,8 +47,34 @@
         <RegistryValue Root="HKCU" Key="Software\AESxWin" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </DirectoryRef>
+    <DirectoryRef Id="TARGETDIR">
+      <Component Id="RegistryEntries" Guid="baad3d10-7af4-4f64-92f2-c560dc76a844">
+        <RegistryKey Root="HKCR"
+                     Key="Directory\Background\shell\AESxWin"
+              Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Value="Encrypt\Decrypt with AESxWin" KeyPath="yes"/>
+          <RegistryValue Type="string" Name="icon" Value="[INSTALLFOLDER]AESxWin.exe"/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\Background\shell\AESxWin\command"
+              Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Value='[INSTALLFOLDER]AESxWin.exe "%V"'/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\shell\AESxWin"
+              Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Value="Encrypt\Decrypt with AESxWin"/>
+          <RegistryValue Type="string" Name="icon" Value="[INSTALLFOLDER]AESxWin.exe"/>
+        </RegistryKey>
+        <RegistryKey Root="HKCR"
+                     Key="Directory\shell\AESxWin\command"
+              Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Value='[INSTALLFOLDER]AESxWin.exe "%1"'/>
+        </RegistryKey>
+      </Component>
+    </DirectoryRef>
   </Fragment>
-  
+
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <Component Id="AESxWin.exe" Guid="7de61a33-b097-454e-8dc1-cf5fd3d87a70">

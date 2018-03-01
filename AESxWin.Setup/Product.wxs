@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <?define AESxWin_TargetDir=$(var.AESxWin.TargetDir)?>
-  <Product Id="fc66cf78-8c9c-4e34-a814-5a5ba08d4aad" Name="AESxWin" Language="1033" Version="1.0.0.0" Manufacturer="NinjaBotsFactory" UpgradeCode="4b282d3c-a6bf-4642-831f-4916768d3146">
+  <Product Id="*" Name="AESxWin" Language="1033" Version="1.0.0.0" Manufacturer="NinjaBotsFactory" UpgradeCode="4b282d3c-a6bf-4642-831f-4916768d3146">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <UIRef Id="WixUI_Minimal" />

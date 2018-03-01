@@ -16,6 +16,8 @@ namespace AESxWin
 {
     public partial class MainWindow : Form
     {
+        private string outputpath;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -111,7 +113,7 @@ namespace AESxWin
         {
             var count = 0;
             var paths = lstPaths.Items;
-            
+
             this.Log("Encryption Started.");
 
             if (paths != null && paths.Count > 0)
@@ -125,7 +127,10 @@ namespace AESxWin
                         {
                             try
                             {
-                                await path.EncryptFileAsync(txtPassword.Text);
+                                if (chkSelectDest.Checked)
+                                    await path.EncryptFileToOutPutPathAsync(txtPassword.Text, outputpath);
+                                else
+                                    await path.EncryptFileAsync(txtPassword.Text);
                                 this.Log(path + " Encrypted.");
                                 count++;
 
@@ -154,7 +159,10 @@ namespace AESxWin
                                 {
                                     try
                                     {
-                                        await file.EncryptFileAsync(txtPassword.Text);
+                                        if (chkSelectDest.Checked)
+                                            await file.EncryptFileToOutPutPathAsync(txtPassword.Text, outputpath);
+                                        else
+                                            await file.EncryptFileAsync(txtPassword.Text);
                                         this.Log(file + " Encrypted.");
                                         count++;
 
@@ -169,7 +177,7 @@ namespace AESxWin
                                 }
                                 else
                                 {
-                                  //  this.Log(file + " Ignored.");
+                                    //  this.Log(file + " Ignored.");
                                 }
                             }
                         }
@@ -204,7 +212,10 @@ namespace AESxWin
                     {
                         try
                         {
-                            await path.DecryptFileAsync(txtPassword.Text);
+                            if (chkSelectDest.Checked)
+                                await path.DecryptFileToOutPutPathAsync(txtPassword.Text, outputpath);
+                            else
+                                await path.DecryptFileAsync(txtPassword.Text);
                             this.Log(path + " Decrypted.");
                             count++;
 
@@ -234,7 +245,10 @@ namespace AESxWin
                                 {
                                     try
                                     {
-                                        await file.DecryptFileAsync(txtPassword.Text);
+                                        if (chkSelectDest.Checked)
+                                            await file.DecryptFileToOutPutPathAsync(txtPassword.Text, outputpath);
+                                        else
+                                            await file.DecryptFileAsync(txtPassword.Text);
                                         this.Log(file + " Decrypted.");
                                         count++;
 
@@ -244,7 +258,7 @@ namespace AESxWin
                                     catch (Exception ex)
                                     {
                                         this.Log(file + " " + ex.Message);
-                                        if(File.Exists(file.RemoveExtension()))
+                                        if (File.Exists(file.RemoveExtension()))
                                             File.Delete(file.RemoveExtension());
                                     }
                                 }
@@ -252,7 +266,7 @@ namespace AESxWin
                             }
                             else
                             {
-                               // this.Log(file + " Ignored.");
+                                // this.Log(file + " Ignored.");
                             }
                         }
 
@@ -268,7 +282,7 @@ namespace AESxWin
 
         private void lblInfo_Click(object sender, EventArgs e)
         {
-            Process.Start("http://eslamx.com");
+            Process.Start("https://github.com/batmanalien");
         }
 
         private void lstPaths_DragDrop(object sender, DragEventArgs e)
@@ -289,6 +303,29 @@ namespace AESxWin
                 e.Effect = DragDropEffects.Copy;
             else
                 e.Effect = DragDropEffects.None;
+        }
+
+        private void chkSelectDest_CheckedChanged(object sender, EventArgs e)
+        {
+            gbDest.Visible = !gbDest.Visible;
+            if (chkSelectDest.Checked)
+            {
+                using (var folderDialog = new FolderBrowserDialog())
+                {
+                    folderDialog.Description = "Select A Folder";
+                    folderDialog.ShowNewFolderButton = true;
+                    folderDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+                    if (folderDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        outputpath = folderDialog.SelectedPath;
+                        txtDest.Text = outputpath;
+                    }
+                }
+            }
+            else
+            {
+                txtDest.Text = "";
+            }
         }
     }
 }

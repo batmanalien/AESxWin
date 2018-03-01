@@ -19,6 +19,14 @@ namespace AESxWin.Helpers
                 SharpAESCrypt.SharpAESCrypt.Encrypt(password, path, path + ".aes");
             });
         }
+        public static async Task EncryptFileToOutPutPathAsync(this string path, string password, string outputpath)
+        {
+            var filename = path.GetFileName();
+            await Task.Run(() =>
+            {
+                SharpAESCrypt.SharpAESCrypt.Encrypt(password, path, Path.Combine(outputpath, filename + ".aes"));
+            });
+        }
         public static async Task EncryptFilesAsync(this IEnumerable<string> paths, string password)
         {
             await Task.Run(async () =>
@@ -42,9 +50,31 @@ namespace AESxWin.Helpers
             });
         }
 
+        public static async Task DecryptFileToOutPutPathAsync(this string path, string password, string outputpath)
+        {
+            var filename = path.GetFileNameWithoutExtension();
+            await Task.Run(() =>
+            {
+
+                SharpAESCrypt.SharpAESCrypt.Decrypt(password, path, outputpath + filename);
+            });
+        }
+
         public static string RemoveExtension(this string path)
         {
             var outputpath = Path.ChangeExtension(path, "").TrimEnd(new char[] { '.' });
+            return outputpath;
+        }
+
+        public static string GetFileName(this string path)
+        {
+            var outputpath = Path.GetFileName(path);
+            return outputpath;
+        }
+
+        public static string GetFileNameWithoutExtension(this string path)
+        {
+            var outputpath = Path.GetFileNameWithoutExtension(path);
             return outputpath;
         }
 

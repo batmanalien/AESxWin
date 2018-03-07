@@ -1,4 +1,5 @@
 ﻿using AESxWin.Helpers;
+using SecureDelete;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -346,7 +347,7 @@ namespace AESxWin
 
         private void DeleteTempFolderAndFileWhenFileClosed(object sender, EventArgs e, string folderPath)
         {
-            Directory.Delete(folderPath, true);
+            Delete.DeleteDirectory(folderPath, true);
             this.Log("File deleted securely...");
         }
 

@@ -79,6 +79,12 @@
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <Component Id="AESxWin.exe" Guid="7de61a33-b097-454e-8dc1-cf5fd3d87a70">
         <File Id="AESxWin.exe" Name="AESxWin.exe" Source="$(var.AESxWin_TargetDir)AESxWin.exe" />
+        <File Id="Icon.ico" Source="$(var.ProjectDir)Icon.ico" />
+        <ProgId Id='AESFileExtension' Description='AES File Extension' Icon='Icon.ico'>
+          <Extension Id='aes' ContentType='application/aes'>
+            <Verb Id='open' Command='Open' TargetFile='AESxWin.exe' Argument='"%1"' />
+          </Extension>
+        </ProgId>
       </Component>
       <Component Id="AESxWin.exe.config" Guid="5c6353a8-8535-4761-bccf-e1cf5b581b32">
         <File Id="AESxWin.exe.config" Name="AESxWin.exe.config" Source="$(var.AESxWin_TargetDir)AESxWin.exe.config" />

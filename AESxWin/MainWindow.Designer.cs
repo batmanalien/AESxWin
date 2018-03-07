@@ -35,6 +35,7 @@
             this.btnAddFile = new System.Windows.Forms.Button();
             this.lstPaths = new System.Windows.Forms.ListBox();
             this.gbOptions = new System.Windows.Forms.GroupBox();
+            this.chkSelectDest = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lstExts = new System.Windows.Forms.ComboBox();
             this.chkSubFolders = new System.Windows.Forms.CheckBox();
@@ -46,9 +47,9 @@
             this.lblInfo = new System.Windows.Forms.Label();
             this.gbLog = new System.Windows.Forms.GroupBox();
             this.txtLog = new System.Windows.Forms.TextBox();
-            this.chkSelectDest = new System.Windows.Forms.CheckBox();
             this.txtDest = new System.Windows.Forms.TextBox();
             this.gbDest = new System.Windows.Forms.GroupBox();
+            this.btnDecryptAndOpen = new System.Windows.Forms.Button();
             this.gbPaths.SuspendLayout();
             this.gbOptions.SuspendLayout();
             this.gbPassword.SuspendLayout();
@@ -134,6 +135,17 @@
             this.gbOptions.TabStop = false;
             this.gbOptions.Text = "Options";
             // 
+            // chkSelectDest
+            // 
+            this.chkSelectDest.AutoSize = true;
+            this.chkSelectDest.Location = new System.Drawing.Point(312, 28);
+            this.chkSelectDest.Name = "chkSelectDest";
+            this.chkSelectDest.Size = new System.Drawing.Size(214, 24);
+            this.chkSelectDest.TabIndex = 4;
+            this.chkSelectDest.Text = "Select Destination Folder";
+            this.chkSelectDest.UseVisualStyleBackColor = true;
+            this.chkSelectDest.CheckedChanged += new System.EventHandler(this.chkSelectDest_CheckedChanged);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -213,7 +225,7 @@
             this.btnEncrypt.Location = new System.Drawing.Point(18, 442);
             this.btnEncrypt.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnEncrypt.Name = "btnEncrypt";
-            this.btnEncrypt.Size = new System.Drawing.Size(244, 63);
+            this.btnEncrypt.Size = new System.Drawing.Size(152, 63);
             this.btnEncrypt.TabIndex = 3;
             this.btnEncrypt.Text = "Encrypt";
             this.btnEncrypt.UseVisualStyleBackColor = true;
@@ -222,10 +234,10 @@
             // btnDecrypt
             // 
             this.btnDecrypt.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold);
-            this.btnDecrypt.Location = new System.Drawing.Point(380, 442);
+            this.btnDecrypt.Location = new System.Drawing.Point(178, 442);
             this.btnDecrypt.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnDecrypt.Name = "btnDecrypt";
-            this.btnDecrypt.Size = new System.Drawing.Size(244, 63);
+            this.btnDecrypt.Size = new System.Drawing.Size(139, 63);
             this.btnDecrypt.TabIndex = 4;
             this.btnDecrypt.Text = "Decrypt";
             this.btnDecrypt.UseVisualStyleBackColor = true;
@@ -270,17 +282,6 @@
             this.txtLog.TabIndex = 0;
             this.txtLog.WordWrap = false;
             // 
-            // chkSelectDest
-            // 
-            this.chkSelectDest.AutoSize = true;
-            this.chkSelectDest.Location = new System.Drawing.Point(312, 28);
-            this.chkSelectDest.Name = "chkSelectDest";
-            this.chkSelectDest.Size = new System.Drawing.Size(214, 24);
-            this.chkSelectDest.TabIndex = 4;
-            this.chkSelectDest.Text = "Select Destination Folder";
-            this.chkSelectDest.UseVisualStyleBackColor = true;
-            this.chkSelectDest.CheckedChanged += new System.EventHandler(this.chkSelectDest_CheckedChanged);
-            // 
             // txtDest
             // 
             this.txtDest.Location = new System.Drawing.Point(9, 25);
@@ -299,12 +300,24 @@
             this.gbDest.Text = "Destination";
             this.gbDest.Visible = false;
             // 
+            // btnDecryptAndOpen
+            // 
+            this.btnDecryptAndOpen.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDecryptAndOpen.Location = new System.Drawing.Point(324, 442);
+            this.btnDecryptAndOpen.Name = "btnDecryptAndOpen";
+            this.btnDecryptAndOpen.Size = new System.Drawing.Size(296, 64);
+            this.btnDecryptAndOpen.TabIndex = 9;
+            this.btnDecryptAndOpen.Text = "Decrypt and Open A File";
+            this.btnDecryptAndOpen.UseVisualStyleBackColor = true;
+            this.btnDecryptAndOpen.Click += new System.EventHandler(this.btnDecryptAndOpen_Click);
+            // 
             // MainWindow
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(642, 726);
+            this.Controls.Add(this.btnDecryptAndOpen);
             this.Controls.Add(this.gbDest);
             this.Controls.Add(this.gbLog);
             this.Controls.Add(this.lblInfo);
@@ -355,6 +368,7 @@
         private System.Windows.Forms.CheckBox chkSelectDest;
         private System.Windows.Forms.GroupBox gbDest;
         private System.Windows.Forms.TextBox txtDest;
+        private System.Windows.Forms.Button btnDecryptAndOpen;
     }
 }
 

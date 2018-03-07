@@ -1,16 +1,9 @@
-﻿using System;
+﻿using AESxWin.Helpers;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using AESxWin.Helpers;
-using System.Threading;
 
 namespace AESxWin
 {
@@ -34,13 +27,11 @@ namespace AESxWin
                 if (File.Exists(path) || Directory.Exists(path))
                     lstPaths.Items.Add(path);
             }
-
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
             lstExts.SelectedIndex = 6;
-
         }
 
         private void btnAddFile_Click(object sender, EventArgs e)
@@ -104,8 +95,6 @@ namespace AESxWin
                             this.Log(folderPath + " is already exist in the list.");
                     }
                 }
-
-
             }
         }
 
@@ -120,8 +109,7 @@ namespace AESxWin
             {
                 foreach (string path in paths)
                 {
-
-                    if (File.Exists(path)) // Is File 
+                    if (File.Exists(path)) // Is File
                     {
                         if (path.CheckExtension(lstExts.Text.ParseExtensions()))
                         {
@@ -139,10 +127,8 @@ namespace AESxWin
                             }
                             catch (Exception ex)
                             {
-
                                 this.Log(path + " " + ex.Message);
                             }
-
                         }
                     }
                     if (Directory.Exists(path)) // Is Folder
@@ -171,7 +157,6 @@ namespace AESxWin
                                     }
                                     catch (Exception ex)
                                     {
-
                                         this.Log(file + " " + ex.Message);
                                     }
                                 }
@@ -181,19 +166,11 @@ namespace AESxWin
                                 }
                             }
                         }
-
-
                     }
-
-
                 }
             }
 
-
-
             this.Log($"Finished : {count} File(s) Encrypted.");
-
-
         }
 
         private async void btnDecrypt_Click(object sender, EventArgs e)
@@ -207,8 +184,7 @@ namespace AESxWin
             {
                 foreach (string path in paths)
                 {
-
-                    if (File.Exists(path) && path.EndsWith(".aes")) // Is Encrypted File 
+                    if (File.Exists(path) && path.EndsWith(".aes")) // Is Encrypted File
                     {
                         try
                         {
@@ -228,8 +204,6 @@ namespace AESxWin
                             if (File.Exists(path.RemoveExtension()))
                                 File.Delete(path.RemoveExtension());
                         }
-
-
                     }
                     if (Directory.Exists(path)) // Is Folder
                     {
@@ -262,18 +236,13 @@ namespace AESxWin
                                             File.Delete(file.RemoveExtension());
                                     }
                                 }
-
                             }
                             else
                             {
                                 // this.Log(file + " Ignored.");
                             }
                         }
-
-
                     }
-
-
                 }
             }
 
@@ -326,6 +295,85 @@ namespace AESxWin
             {
                 txtDest.Text = "";
             }
+        }
+
+        private async void btnDecryptAndOpen_Click(object sender, EventArgs e)
+        {
+            string tempFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AESxWin", Guid.NewGuid().ToString());
+            var paths = lstPaths.Items;
+
+            this.Log("Decryption Started.");
+
+            if (paths.Count == 1)
+            {
+                var path = paths[0].ToString();
+
+                if (File.Exists(path) && path.EndsWith(".aes")) // Is Encrypted File
+                {
+                    try
+                    {
+                        if (chkSelectDest.Checked)
+                            await path.DecryptFileToOutPutPathAsync(txtPassword.Text, outputpath);
+                        else
+                        {
+                            await path.DecryptFileToOutPutPathAsync(txtPassword.Text, tempFolderPath);
+
+                            this.Log(path + " Decrypted. Opening File...");
+
+                            if (chkDeleteOrg.Checked)
+                                File.Delete(path);
+
+                            string tempFilePath = Path.Combine(tempFolderPath, path.GetFileNameWithoutExtension());
+
+                            var process = Process.Start(tempFilePath);
+                            process.EnableRaisingEvents = true;
+                            process.Exited += (sdr, evt) => DeleteTempFolderAndFileWhenFileClosed(sdr, evt, tempFolderPath);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Log(path + " " + ex.Message);
+                        if (File.Exists(path.RemoveExtension()))
+                            File.Delete(path.RemoveExtension());
+                    }
+                }
+            }
+            else
+            {
+                this.Log("Decrypt and Open operation is only allowed for single file");
+            }
+        }
+
+        private void DeleteTempFolderAndFileWhenFileClosed(object sender, EventArgs e, string folderPath)
+        {
+            Directory.Delete(folderPath, true);
+            this.Log("File deleted securely...");
+        }
+
+        protected virtual bool IsFileLocked(FileInfo file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+
+            //file is not locked
+            return false;
         }
     }
 }

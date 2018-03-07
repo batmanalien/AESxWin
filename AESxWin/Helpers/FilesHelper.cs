@@ -22,6 +22,10 @@ namespace AESxWin.Helpers
         public static async Task EncryptFileToOutPutPathAsync(this string path, string password, string outputpath)
         {
             var filename = path.GetFileName();
+
+            if (!Directory.Exists(outputpath))
+                Directory.CreateDirectory(outputpath);
+
             await Task.Run(() =>
             {
                 SharpAESCrypt.SharpAESCrypt.Encrypt(password, path, Path.Combine(outputpath, filename + ".aes"));
@@ -53,10 +57,14 @@ namespace AESxWin.Helpers
         public static async Task DecryptFileToOutPutPathAsync(this string path, string password, string outputpath)
         {
             var filename = path.GetFileNameWithoutExtension();
+
+            if(!Directory.Exists(outputpath))
+                Directory.CreateDirectory(outputpath);
+
             await Task.Run(() =>
             {
 
-                SharpAESCrypt.SharpAESCrypt.Decrypt(password, path, outputpath + filename);
+                SharpAESCrypt.SharpAESCrypt.Decrypt(password, path, Path.Combine(outputpath, filename));
             });
         }
 

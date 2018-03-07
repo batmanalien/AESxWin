@@ -10,7 +10,7 @@ namespace AESxWin
 {
     public partial class MainWindow : Form
     {
-        private string outputpath;
+        private string _selectedOutputPath;
 
         public MainWindow()
         {
@@ -117,14 +117,14 @@ namespace AESxWin
                             try
                             {
                                 if (chkSelectDest.Checked)
-                                    await path.EncryptFileToOutPutPathAsync(txtPassword.Text, outputpath);
+                                    await path.EncryptFileToOutPutPathAsync(txtPassword.Text, _selectedOutputPath);
                                 else
                                     await path.EncryptFileAsync(txtPassword.Text);
                                 this.Log(path + " Encrypted.");
                                 count++;
 
                                 if (chkDeleteOrg.Checked)
-                                    File.Delete(path);
+                                    Delete.DeleteFile(path);
                             }
                             catch (Exception ex)
                             {
@@ -147,14 +147,14 @@ namespace AESxWin
                                     try
                                     {
                                         if (chkSelectDest.Checked)
-                                            await file.EncryptFileToOutPutPathAsync(txtPassword.Text, outputpath);
+                                            await file.EncryptFileToOutPutPathAsync(txtPassword.Text, _selectedOutputPath);
                                         else
                                             await file.EncryptFileAsync(txtPassword.Text);
                                         this.Log(file + " Encrypted.");
                                         count++;
 
                                         if (chkDeleteOrg.Checked)
-                                            File.Delete(file);
+                                            Delete.DeleteFile(file);
                                     }
                                     catch (Exception ex)
                                     {
@@ -190,20 +190,20 @@ namespace AESxWin
                         try
                         {
                             if (chkSelectDest.Checked)
-                                await path.DecryptFileToOutPutPathAsync(txtPassword.Text, outputpath);
+                                await path.DecryptFileToOutPutPathAsync(txtPassword.Text, _selectedOutputPath);
                             else
                                 await path.DecryptFileAsync(txtPassword.Text);
                             this.Log(path + " Decrypted.");
                             count++;
 
                             if (chkDeleteOrg.Checked)
-                                File.Delete(path);
+                                Delete.DeleteFile(path);
                         }
                         catch (Exception ex)
                         {
                             this.Log(path + " " + ex.Message);
                             if (File.Exists(path.RemoveExtension()))
-                                File.Delete(path.RemoveExtension());
+                                Delete.DeleteFile(path.RemoveExtension());
                         }
                     }
                     if (Directory.Exists(path)) // Is Folder
@@ -221,20 +221,20 @@ namespace AESxWin
                                     try
                                     {
                                         if (chkSelectDest.Checked)
-                                            await file.DecryptFileToOutPutPathAsync(txtPassword.Text, outputpath);
+                                            await file.DecryptFileToOutPutPathAsync(txtPassword.Text, _selectedOutputPath);
                                         else
                                             await file.DecryptFileAsync(txtPassword.Text);
                                         this.Log(file + " Decrypted.");
                                         count++;
 
                                         if (chkDeleteOrg.Checked)
-                                            File.Delete(file);
+                                            Delete.DeleteFile(file);
                                     }
                                     catch (Exception ex)
                                     {
                                         this.Log(file + " " + ex.Message);
                                         if (File.Exists(file.RemoveExtension()))
-                                            File.Delete(file.RemoveExtension());
+                                            Delete.DeleteFile(file.RemoveExtension());
                                     }
                                 }
                             }
@@ -287,8 +287,8 @@ namespace AESxWin
                     folderDialog.RootFolder = Environment.SpecialFolder.MyComputer;
                     if (folderDialog.ShowDialog() == DialogResult.OK)
                     {
-                        outputpath = folderDialog.SelectedPath;
-                        txtDest.Text = outputpath;
+                        _selectedOutputPath = folderDialog.SelectedPath;
+                        txtDest.Text = _selectedOutputPath;
                     }
                 }
             }
@@ -307,35 +307,29 @@ namespace AESxWin
 
             if (paths.Count == 1)
             {
-                var path = paths[0].ToString();
+                var srcFilePath = paths[0].ToString();
 
-                if (File.Exists(path) && path.EndsWith(".aes")) // Is Encrypted File
+                if (File.Exists(srcFilePath) && srcFilePath.EndsWith(".aes")) // Is Encrypted File
                 {
                     try
                     {
                         if (chkSelectDest.Checked)
-                            await path.DecryptFileToOutPutPathAsync(txtPassword.Text, outputpath);
+                        {
+                            await srcFilePath.DecryptFileToOutPutPathAsync(txtPassword.Text, _selectedOutputPath);
+
+                            OpenDecryptedFile(srcFilePath, _selectedOutputPath);
+                        }
                         else
                         {
-                            await path.DecryptFileToOutPutPathAsync(txtPassword.Text, tempFolderPath);
-
-                            this.Log(path + " Decrypted. Opening File...");
-
-                            if (chkDeleteOrg.Checked)
-                                File.Delete(path);
-
-                            string tempFilePath = Path.Combine(tempFolderPath, path.GetFileNameWithoutExtension());
-
-                            var process = Process.Start(tempFilePath);
-                            process.EnableRaisingEvents = true;
-                            process.Exited += (sdr, evt) => DeleteTempFolderAndFileWhenFileClosed(sdr, evt, tempFolderPath);
+                            await srcFilePath.DecryptFileToOutPutPathAsync(txtPassword.Text, tempFolderPath);
+                            OpenDecryptedFile(srcFilePath, tempFolderPath);
                         }
                     }
                     catch (Exception ex)
                     {
-                        this.Log(path + " " + ex.Message);
-                        if (File.Exists(path.RemoveExtension()))
-                            File.Delete(path.RemoveExtension());
+                        this.Log(srcFilePath + " " + ex.Message);
+                        if (File.Exists(srcFilePath.RemoveExtension()))
+                            Delete.DeleteFile(srcFilePath.RemoveExtension());
                     }
                 }
             }
@@ -345,36 +339,28 @@ namespace AESxWin
             }
         }
 
-        private void DeleteTempFolderAndFileWhenFileClosed(object sender, EventArgs e, string folderPath)
+        private void OpenDecryptedFile(string srcFilePath, string destFolderPath)
         {
-            Delete.DeleteDirectory(folderPath, true);
-            this.Log("File deleted securely...");
+            this.Log(srcFilePath + " Decrypted. Opening File...");
+
+            if (chkDeleteOrg.Checked)
+                Delete.DeleteFile(srcFilePath);
+
+            string destFilePath = Path.Combine(destFolderPath, srcFilePath.GetFileNameWithoutExtension());
+
+            var process = Process.Start(destFilePath);
+            process.EnableRaisingEvents = true;
+            process.Exited += (sdr, evt) => DeleteFileWhenFileClosed(sdr, evt, destFolderPath, destFilePath);
         }
 
-        protected virtual bool IsFileLocked(FileInfo file)
+        private void DeleteFileWhenFileClosed(object sender, EventArgs e, string folderPath, string filePath)
         {
-            FileStream stream = null;
-
-            try
-            {
-                stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None);
-            }
-            catch (IOException)
-            {
-                //the file is unavailable because it is:
-                //still being written to
-                //or being processed by another thread
-                //or does not exist (has already been processed)
-                return true;
-            }
-            finally
-            {
-                if (stream != null)
-                    stream.Close();
-            }
-
-            //file is not locked
-            return false;
+            // Delete temp folder if the file is in temp folder
+            if (folderPath.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)))
+                Delete.DeleteDirectory(folderPath, true);
+            else
+                Delete.DeleteFile(filePath);
+            this.Log("File deleted securely...");
         }
     }
 }

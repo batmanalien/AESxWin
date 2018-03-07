@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -10,8 +9,6 @@ namespace AESxWin.Helpers
 {
     public static class FilesHelper
     {
-
-
         public static async Task EncryptFileAsync(this string path, string password)
         {
             await Task.Run(() =>
@@ -19,6 +16,7 @@ namespace AESxWin.Helpers
                 SharpAESCrypt.SharpAESCrypt.Encrypt(password, path, path + ".aes");
             });
         }
+
         public static async Task EncryptFileToOutPutPathAsync(this string path, string password, string outputpath)
         {
             var filename = path.GetFileName();
@@ -31,6 +29,7 @@ namespace AESxWin.Helpers
                 SharpAESCrypt.SharpAESCrypt.Encrypt(password, path, Path.Combine(outputpath, filename + ".aes"));
             });
         }
+
         public static async Task EncryptFilesAsync(this IEnumerable<string> paths, string password)
         {
             await Task.Run(async () =>
@@ -39,7 +38,6 @@ namespace AESxWin.Helpers
                 {
                     await path.EncryptFileAsync(password);
                     TextBoxLogHelper.Log(path + " Encrypted.");
-
                 }
             });
         }
@@ -49,7 +47,6 @@ namespace AESxWin.Helpers
             var outputpath = path.RemoveExtension();
             await Task.Run(() =>
             {
-
                 SharpAESCrypt.SharpAESCrypt.Decrypt(password, path, outputpath);
             });
         }
@@ -58,12 +55,11 @@ namespace AESxWin.Helpers
         {
             var filename = path.GetFileNameWithoutExtension();
 
-            if(!Directory.Exists(outputpath))
+            if (!Directory.Exists(outputpath))
                 Directory.CreateDirectory(outputpath);
 
             await Task.Run(() =>
             {
-
                 SharpAESCrypt.SharpAESCrypt.Decrypt(password, path, Path.Combine(outputpath, filename));
             });
         }
@@ -93,11 +89,9 @@ namespace AESxWin.Helpers
                 foreach (var path in paths)
                 {
                     await path.DecryptFileAsync(password);
-
                 }
             });
         }
-
 
         public static IEnumerable<string> GetFolderFilesPaths(this string folder, bool followSubDirs = true)
         {
@@ -109,13 +103,10 @@ namespace AESxWin.Helpers
                 var subFolders = Directory.GetDirectories(folder);
                 if (subFolders != null)
                 {
-
                     foreach (var path in subFolders)
                     {
                         paths.AddRange(GetFolderFilesPaths(path));
-
                     }
-
                 }
             }
             var subFiles = Directory.GetFiles(folder);
@@ -123,7 +114,6 @@ namespace AESxWin.Helpers
             {
                 paths.AddRange(subFiles);
             }
-
 
             return paths;
         }
@@ -140,12 +130,10 @@ namespace AESxWin.Helpers
             foreach (var ext in matches)
             {
                 exts.Add("." + ext.ToString());
-                
             }
 
             return exts;
         }
-
 
         public static bool CheckExtension(this string path, IEnumerable<string> extensions)
         {
@@ -163,6 +151,5 @@ namespace AESxWin.Helpers
             }
             return false;
         }
-
     }
 }

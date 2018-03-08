@@ -981,8 +981,8 @@ namespace SharpAESCrypt
         /// <param name="output">The encrypted output file</param>
         public static void Encrypt(string password, string inputfile, string outputfile)
         {
-            using (FileStream infs = File.OpenRead(inputfile))
-            using (FileStream outfs = File.Create(outputfile))
+            using (FileStream infs = new FileStream(inputfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (FileStream outfs = new FileStream(outputfile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                 Encrypt(password, infs, outfs);
         }
 
@@ -994,8 +994,8 @@ namespace SharpAESCrypt
         /// <param name="output">The unencrypted output file</param>
         public static void Decrypt(string password, string inputfile, string outputfile)
         {
-            using (FileStream infs = File.OpenRead(inputfile))
-            using (FileStream outfs = File.Create(outputfile))
+            using (FileStream infs = new FileStream(inputfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (FileStream outfs = new FileStream(outputfile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
                 Decrypt(password, infs, outfs);
         }
         #endregion

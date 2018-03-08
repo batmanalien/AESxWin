@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <?define AESxWin_TargetDir=$(var.AESxWin.TargetDir)?>
-  <Product Id="*" Name="AESxWin" Language="1033" Version="1.0.0.0" Manufacturer="NinjaBotsFactory" UpgradeCode="4b282d3c-a6bf-4642-831f-4916768d3146">
+  <Product Id="*" Name="AESxWin" Language="1033" Version="2.0.0.0" Manufacturer="NinjaBotsFactory" UpgradeCode="4b282d3c-a6bf-4642-831f-4916768d3146">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <UIRef Id="WixUI_Minimal" />
@@ -10,7 +10,7 @@
     <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\License.rtf" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-    <MediaTemplate EmbedCab="yes"/>
+    <MediaTemplate EmbedCab="yes" />
 
     <Feature Id="ProductFeature" Title="AESxWin" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
@@ -26,9 +26,9 @@
         <Directory Id="INSTALLFOLDER" Name="AESxWin" />
       </Directory>
       <Directory Id="ProgramMenuFolder">
-        <Directory Id="ApplicationProgramsFolder" Name="AESxWin"/>
+        <Directory Id="ApplicationProgramsFolder" Name="AESxWin" />
       </Directory>
-      <Directory Id="DesktopFolder" Name="Desktop"/>
+      <Directory Id="DesktopFolder" Name="Desktop" />
     </Directory>
   </Fragment>
 
@@ -49,27 +49,19 @@
     </DirectoryRef>
     <DirectoryRef Id="TARGETDIR">
       <Component Id="RegistryEntries" Guid="baad3d10-7af4-4f64-92f2-c560dc76a844">
-        <RegistryKey Root="HKCR"
-                     Key="Directory\Background\shell\AESxWin"
-              Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Value="Encrypt\Decrypt with AESxWin" KeyPath="yes"/>
-          <RegistryValue Type="string" Name="Icon" Value="[INSTALLFOLDER]AESxWin.exe"/>
+        <RegistryKey Root="HKCR" Key="Directory\Background\shell\AESxWin" Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Value="Encrypt\Decrypt with AESxWin" KeyPath="yes" />
+          <RegistryValue Type="string" Name="Icon" Value="[INSTALLFOLDER]AESxWin.exe" />
         </RegistryKey>
-        <RegistryKey Root="HKCR"
-                     Key="Directory\Background\shell\AESxWin\command"
-              Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Value='[INSTALLFOLDER]AESxWin.exe "%V"'/>
+        <RegistryKey Root="HKCR" Key="Directory\Background\shell\AESxWin\command" Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Value="[INSTALLFOLDER]AESxWin.exe &quot;%V&quot;" />
         </RegistryKey>
-        <RegistryKey Root="HKCR"
-                     Key="Directory\shell\AESxWin"
-              Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Value="Encrypt\Decrypt with AESxWin"/>
-          <RegistryValue Type="string" Name="Icon" Value="[INSTALLFOLDER]AESxWin.exe"/>
+        <RegistryKey Root="HKCR" Key="Directory\shell\AESxWin" Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Value="Encrypt\Decrypt with AESxWin" />
+          <RegistryValue Type="string" Name="Icon" Value="[INSTALLFOLDER]AESxWin.exe" />
         </RegistryKey>
-        <RegistryKey Root="HKCR"
-                     Key="Directory\shell\AESxWin\command"
-              Action="createAndRemoveOnUninstall">
-          <RegistryValue Type="string" Value='[INSTALLFOLDER]AESxWin.exe "%1"'/>
+        <RegistryKey Root="HKCR" Key="Directory\shell\AESxWin\command" Action="createAndRemoveOnUninstall">
+          <RegistryValue Type="string" Value="[INSTALLFOLDER]AESxWin.exe &quot;%1&quot;" />
         </RegistryKey>
       </Component>
     </DirectoryRef>
@@ -80,14 +72,26 @@
       <Component Id="AESxWin.exe" Guid="7de61a33-b097-454e-8dc1-cf5fd3d87a70">
         <File Id="AESxWin.exe" Name="AESxWin.exe" Source="$(var.AESxWin_TargetDir)AESxWin.exe" />
         <File Id="Icon.ico" Source="$(var.ProjectDir)Icon.ico" />
-        <ProgId Id='AESFileExtension' Description='AES File Extension' Icon='Icon.ico'>
-          <Extension Id='aes' ContentType='application/aes'>
-            <Verb Id='open' Command='Open' TargetFile='AESxWin.exe' Argument='"%1"' />
+        <ProgId Id="AESFileExtension" Description="AES File Extension" Icon="Icon.ico">
+          <Extension Id="aes" ContentType="application/aes">
+            <Verb Id="open" Command="Open" TargetFile="AESxWin.exe" Argument="&quot;%1&quot;" />
           </Extension>
         </ProgId>
       </Component>
       <Component Id="AESxWin.exe.config" Guid="5c6353a8-8535-4761-bccf-e1cf5b581b32">
         <File Id="AESxWin.exe.config" Name="AESxWin.exe.config" Source="$(var.AESxWin_TargetDir)AESxWin.exe.config" />
+      </Component>
+      <Component Id="DiskDetector.dll" Guid="c522a910-db61-4e16-92b2-22eece8d02e4">
+        <File Id="DiskDetector.dll" Name="DiskDetector.dll" Source="$(var.AESxWin_TargetDir)DiskDetector.dll" />
+      </Component>
+      <Component Id="FSWatcher.dll" Guid="3f3f3e1e-ac69-48a2-b773-325c63d6ae6c">
+        <File Id="FSWatcher.dll" Name="FSWatcher.dll" Source="$(var.AESxWin_TargetDir)FSWatcher.dll" />
+      </Component>
+      <Component Id="Helper.dll" Guid="a9dcd11f-c079-4a08-ad78-ae5d62e7896a">
+        <File Id="Helper.dll" Name="Helper.dll" Source="$(var.AESxWin_TargetDir)Helper.dll" />
+      </Component>
+      <Component Id="SecureDelete.dll" Guid="3d705bb0-390d-4261-8e02-6a431e633e10">
+        <File Id="SecureDelete.dll" Name="SecureDelete.dll" Source="$(var.AESxWin_TargetDir)SecureDelete.dll" />
       </Component>
     </ComponentGroup>
   </Fragment>

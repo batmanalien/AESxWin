@@ -76,6 +76,12 @@ namespace AESxWin.Helpers
             return outputpath;
         }
 
+        public static string GetDirectoryName(this string path)
+        {
+            var outputpath = Path.GetDirectoryName(path);
+            return outputpath;
+        }
+
         public static string GetFileNameWithoutExtension(this string path)
         {
             var outputpath = Path.GetFileNameWithoutExtension(path);

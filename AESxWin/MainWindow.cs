@@ -1,16 +1,20 @@
 ﻿using AESxWin.Helpers;
+using FSWatcher;
 using SecureDelete;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AESxWin
 {
     public partial class MainWindow : Form
     {
-        private string _selectedOutputPath;
+        private string _customDestFolder;
+        private Watcher _watcher;
+        private string _openFileFolder;
 
         public MainWindow()
         {
@@ -44,7 +48,7 @@ namespace AESxWin
                 fileDialog.CheckPathExists = true;
                 fileDialog.Multiselect = true;
                 fileDialog.SupportMultiDottedExtensions = true;
-                fileDialog.InitialDirectory = Application.StartupPath;
+                fileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop).ToString();
 
                 if (fileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -83,7 +87,7 @@ namespace AESxWin
             {
                 folderDialog.Description = "Select A Folder";
                 folderDialog.ShowNewFolderButton = true;
-                folderDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+                folderDialog.RootFolder = Environment.SpecialFolder.Desktop;
                 if (folderDialog.ShowDialog() == DialogResult.OK)
                 {
                     var folderPath = folderDialog.SelectedPath;
@@ -117,7 +121,7 @@ namespace AESxWin
                             try
                             {
                                 if (chkSelectDest.Checked)
-                                    await path.EncryptFileToOutPutPathAsync(txtPassword.Text, _selectedOutputPath);
+                                    await path.EncryptFileToOutPutPathAsync(txtPassword.Text, _customDestFolder);
                                 else
                                     await path.EncryptFileAsync(txtPassword.Text);
                                 this.Log(path + " Encrypted.");
@@ -147,7 +151,7 @@ namespace AESxWin
                                     try
                                     {
                                         if (chkSelectDest.Checked)
-                                            await file.EncryptFileToOutPutPathAsync(txtPassword.Text, _selectedOutputPath);
+                                            await file.EncryptFileToOutPutPathAsync(txtPassword.Text, _customDestFolder);
                                         else
                                             await file.EncryptFileAsync(txtPassword.Text);
                                         this.Log(file + " Encrypted.");
@@ -190,7 +194,7 @@ namespace AESxWin
                         try
                         {
                             if (chkSelectDest.Checked)
-                                await path.DecryptFileToOutPutPathAsync(txtPassword.Text, _selectedOutputPath);
+                                await path.DecryptFileToOutPutPathAsync(txtPassword.Text, _customDestFolder);
                             else
                                 await path.DecryptFileAsync(txtPassword.Text);
                             this.Log(path + " Decrypted.");
@@ -221,7 +225,7 @@ namespace AESxWin
                                     try
                                     {
                                         if (chkSelectDest.Checked)
-                                            await file.DecryptFileToOutPutPathAsync(txtPassword.Text, _selectedOutputPath);
+                                            await file.DecryptFileToOutPutPathAsync(txtPassword.Text, _customDestFolder);
                                         else
                                             await file.DecryptFileAsync(txtPassword.Text);
                                         this.Log(file + " Decrypted.");
@@ -284,11 +288,11 @@ namespace AESxWin
                 {
                     folderDialog.Description = "Select A Folder";
                     folderDialog.ShowNewFolderButton = true;
-                    folderDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+                    folderDialog.RootFolder = Environment.SpecialFolder.Desktop;
                     if (folderDialog.ShowDialog() == DialogResult.OK)
                     {
-                        _selectedOutputPath = folderDialog.SelectedPath;
-                        txtDest.Text = _selectedOutputPath;
+                        _customDestFolder = folderDialog.SelectedPath;
+                        txtDest.Text = _customDestFolder;
                     }
                 }
             }
@@ -300,67 +304,112 @@ namespace AESxWin
 
         private async void btnDecryptAndOpen_Click(object sender, EventArgs e)
         {
-            string tempFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AESxWin", Guid.NewGuid().ToString());
+            //Set destination output folder to temp folder initially
+            string destFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AESxWin", Guid.NewGuid().ToString());
             var paths = lstPaths.Items;
 
             this.Log("Decryption Started.");
 
             if (paths.Count == 1)
             {
-                var srcFilePath = paths[0].ToString();
+                string _openFile = paths[0].ToString();
+                _openFileFolder = _openFile.GetDirectoryName();
 
-                if (File.Exists(srcFilePath) && srcFilePath.EndsWith(".aes")) // Is Encrypted File
+                if (File.Exists(_openFile) && _openFile.EndsWith(".aes")) // Is Encrypted File
                 {
                     try
                     {
+                        //Set destination output folder to user select folder
                         if (chkSelectDest.Checked)
-                        {
-                            await srcFilePath.DecryptFileToOutPutPathAsync(txtPassword.Text, _selectedOutputPath);
-
-                            OpenDecryptedFile(srcFilePath, _selectedOutputPath);
-                        }
-                        else
-                        {
-                            await srcFilePath.DecryptFileToOutPutPathAsync(txtPassword.Text, tempFolderPath);
-                            OpenDecryptedFile(srcFilePath, tempFolderPath);
-                        }
+                            destFolder = _customDestFolder;
+                        await _openFile.DecryptFileToOutPutPathAsync(txtPassword.Text, destFolder);
+                        OpenDecryptedFileAsync(_openFile, destFolder);
                     }
                     catch (Exception ex)
                     {
-                        this.Log(srcFilePath + " " + ex.Message);
-                        if (File.Exists(srcFilePath.RemoveExtension()))
-                            Delete.DeleteFile(srcFilePath.RemoveExtension());
+                        this.Log(_openFile + " " + ex.Message);
+                        if (File.Exists(_openFile.RemoveExtension()))
+                            Delete.DeleteFile(_openFile.RemoveExtension());
+                        //Delete temp folder if there is any
+                        if (Directory.Exists(destFolder) && destFolder.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)))
+                        {
+                            Directory.Delete(destFolder, true);
+                            this.Log("Deleted temp folder: " + destFolder);
+                        }
                     }
                 }
             }
             else
             {
-                this.Log("Decrypt and Open operation is only allowed for single file");
+                this.Log("ERROR", "Decrypt and Open operation is only allowed for single file");
             }
         }
 
-        private void OpenDecryptedFile(string srcFilePath, string destFolderPath)
+        private async void OpenDecryptedFileAsync(string srcFile, string destFolder)
         {
-            this.Log(srcFilePath + " Decrypted. Opening File...");
+            this.Log("Openning file: " + srcFile);
 
             if (chkDeleteOrg.Checked)
-                Delete.DeleteFile(srcFilePath);
+                Delete.DeleteFile(srcFile);
 
-            string destFilePath = Path.Combine(destFolderPath, srcFilePath.GetFileNameWithoutExtension());
+            string destFile = Path.Combine(destFolder, srcFile.GetFileNameWithoutExtension());
 
-            var process = Process.Start(destFilePath);
+            //Open file in its default application
+            var process = Process.Start(destFile);
             process.EnableRaisingEvents = true;
-            process.Exited += (sdr, evt) => DeleteFileWhenFileClosed(sdr, evt, destFolderPath, destFilePath);
+            process.Exited += (sdr, evt) => DeleteFileWhenFileClosed(sdr, evt, destFile);
+
+            await WatchFileChangedAsync(destFolder);
         }
 
-        private void DeleteFileWhenFileClosed(object sender, EventArgs e, string folderPath, string filePath)
+        private async Task WatchFileChangedAsync(string watchFolder)
         {
-            // Delete temp folder if the file is in temp folder
-            if (folderPath.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)))
-                Delete.DeleteDirectory(folderPath, true);
+            await Task.Run(() =>
+            {
+                _watcher = new Watcher(watchFolder, (s) => { }, (s) => { }, (s) => { }, FileChangedAction(), (s) => { });
+                _watcher.ErrorNotifier((path, ex) => { this.Log("ERROR", path, ex); });
+                _watcher.Watch();
+            });
+        }
+
+        private Action<string> FileChangedAction()
+        {
+            return async (s) =>
+            {
+                //Skip *.aes files in watch folder
+                if (!s.EndsWith(".aes"))
+                {
+                    this.Log($"{s} changed...");
+                    try
+                    {
+                        await s.EncryptFileToOutPutPathAsync(txtPassword.Text, _openFileFolder);
+                        this.Log($"{s} encrypted...");
+                    }
+                    catch (Exception e)
+                    {
+                        this.Log("ERROR", e.Message, e);
+                    }
+                }
+            };
+        }
+
+        private void DeleteFileWhenFileClosed(object sender, EventArgs e, string file)
+        {
+            _watcher.StopWatching();
+
+            string destFolder = file.GetDirectoryName();
+
+            //Delete temp folder if there is any
+            if (Directory.Exists(destFolder) && destFolder.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)))
+            {
+                Directory.Delete(destFolder, true);
+                this.Log("Deleted temp folder: " + destFolder);
+            }
             else
-                Delete.DeleteFile(filePath);
-            this.Log("File deleted securely...");
+            {
+                Delete.DeleteFile(file);
+            }
+            this.Log("Deleted file: " + file);
         }
     }
 }

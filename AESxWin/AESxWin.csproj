@@ -11,6 +11,7 @@
     <AssemblyName>AESxWin</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,6 +41,9 @@
   <ItemGroup>
     <Reference Include="DiskDetector, Version=0.3.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\diskdetector-net.0.3.1\lib\net\DiskDetector.dll</HintPath>
+    </Reference>
+    <Reference Include="FSWatcher, Version=1.0.5637.19275, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FSWatcher.0.1.0\lib\FSWatcher.dll</HintPath>
     </Reference>
     <Reference Include="Helper, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\helper-net.0.1.3\lib\net\Helper.dll</HintPath>
@@ -81,8 +85,11 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -94,7 +101,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="1464273828_security-safety-shield.ico" />

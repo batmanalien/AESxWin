@@ -411,5 +411,47 @@ namespace AESxWin
             }
             this.Log("Deleted file: " + file);
         }
+
+        private void TxtPassword_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                epPassword.SetError(txtPassword, "Password can not be blank!");
+            }
+            else
+            {
+                epPassword.Clear();
+            }
+        }
+
+        private void TxtPasswordConfirm_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtPasswordConfirm.Text))
+            {
+                epPassword.SetError(txtPasswordConfirm, "Password confirm cannot be blank!");
+            }
+            else
+            {
+                epPassword.Clear();
+            }
+
+            if (txtPassword.Text == txtPasswordConfirm.Text)
+            {
+                epPassword.Clear();
+                SetButtonStatus(true);
+            }
+            else
+            {
+                epPassword.SetError(txtPasswordConfirm, "Password does not match!");
+                SetButtonStatus(false);
+            }
+        }
+
+        private void SetButtonStatus(bool status)
+        {
+            btnEncrypt.Enabled = status;
+            btnDecrypt.Enabled = status;
+            btnDecryptAndOpen.Enabled = status;
+        }
     }
 }

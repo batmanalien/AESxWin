@@ -453,5 +453,129 @@ namespace AESxWin
             btnDecrypt.Enabled = status;
             btnDecryptAndOpen.Enabled = status;
         }
+
+        private void ChkChangePassword_CheckedChanged(object sender, EventArgs e)
+        {
+            gbNewPassword.Enabled = !gbNewPassword.Enabled;
+        }
+
+        private async void BtnChangePassword_Click(object sender, EventArgs e)
+        {
+            //Decrypt files to temp folder
+            //Set destination output folder to temp folder initially
+            string tempFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "AESxWin", Guid.NewGuid().ToString());
+            var count = 0;
+            var paths = lstPaths.Items;
+
+            this.Log("Decryption Started.");
+
+            if (paths.Count == 1)
+            {
+                string path = paths[0].ToString();
+
+                if (File.Exists(path) && path.EndsWith(".aes")) // Is Encrypted File
+                {
+                    try
+                    {
+                        await path.DecryptFileToOutPutPathAsync(txtPassword.Text, tempFolder);
+
+                        this.Log(path + " Decrypted.");
+                        count++;
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Log(path + " " + ex.Message);
+                        if (File.Exists(path.RemoveExtension()))
+                            Delete.DeleteFile(path.RemoveExtension());
+                    }
+                }
+                if (Directory.Exists(path)) // Is Folder
+                {
+                    var followSubDirs = chkSubFolders.Checked ? true : false;
+
+                    var allfiles = path.GetFolderFilesPaths(followSubDirs);
+
+                    foreach (var file in allfiles)
+                    {
+                        if (file.RemoveExtension().CheckExtension(lstExts.Text.ParseExtensions()))
+                        {
+                            if (file.EndsWith(".aes"))
+                            {
+                                try
+                                {
+                                    await file.DecryptFileToOutPutPathAsync(txtPassword.Text, tempFolder);
+
+                                    this.Log(file + " Decrypted with password " + txtPassword.Text);
+                                    count++;
+                                }
+                                catch (Exception ex)
+                                {
+                                    this.Log(file + " " + ex.Message);
+                                    if (File.Exists(file.RemoveExtension()))
+                                        Delete.DeleteFile(file.RemoveExtension());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // this.Log(file + " Ignored.");
+                        }
+                    }
+                }
+
+                //Encrypt files in temp folder that have been decrypted above with new password
+                if (Directory.Exists(tempFolder)) // Is Folder
+                {
+                    var followSubDirs = chkSubFolders.Checked ? true : false;
+
+                    var allfiles = tempFolder.GetFolderFilesPaths(followSubDirs);
+
+                    foreach (var file in allfiles)
+                    {
+                        if (file.CheckExtension(lstExts.Text.ParseExtensions()))
+                        {
+                            if (!file.EndsWith(".aes"))
+                            {
+                                try
+                                {
+                                    if (chkSelectDest.Checked)
+                                        await file.EncryptFileToOutPutPathAsync(txtNewPassword.Text, _customDestFolder);
+                                    else
+                                    {
+                                        string outputPath = Directory.Exists(path) ? path : path.GetDirectoryName();
+                                        this.Log($"outputPath = {outputPath}");
+                                        await file.EncryptFileToOutPutPathAsync(txtNewPassword.Text, path);
+                                    }
+                                    this.Log(file + " Encrypted with password " + txtNewPassword.Text);
+                                    count++;
+
+                                    if (chkDeleteOrg.Checked)
+                                        Delete.DeleteFile(file);
+                                }
+                                catch (Exception ex)
+                                {
+                                    this.Log(file + " " + ex.Message);
+                                }
+                            }
+                            else
+                            {
+                                //  this.Log(file + " Ignored.");
+                            }
+                        }
+                    }
+                }
+
+                Delete.DeleteDirectory(tempFolder, true);
+
+            }
+            else
+            {
+                this.Log("Please select only one path.");
+            }
+
+            this.Log($"Finished : {count} File(s) Decrypted.");
+
+
+        }
     }
 }

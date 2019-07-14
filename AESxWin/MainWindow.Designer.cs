@@ -51,15 +51,19 @@
             this.txtDest = new System.Windows.Forms.TextBox();
             this.gbDest = new System.Windows.Forms.GroupBox();
             this.btnDecryptAndOpen = new System.Windows.Forms.Button();
-            this.gbPasswordConfirm = new System.Windows.Forms.GroupBox();
+            this.gbNewPassword = new System.Windows.Forms.GroupBox();
             this.txtPasswordConfirm = new System.Windows.Forms.TextBox();
             this.epPassword = new System.Windows.Forms.ErrorProvider(this.components);
+            this.txtNewPasswordConfirm = new System.Windows.Forms.TextBox();
+            this.txtNewPassword = new System.Windows.Forms.TextBox();
+            this.chkChangePassword = new System.Windows.Forms.CheckBox();
+            this.btnChangePassword = new System.Windows.Forms.Button();
             this.gbPaths.SuspendLayout();
             this.gbOptions.SuspendLayout();
             this.gbPassword.SuspendLayout();
             this.gbLog.SuspendLayout();
             this.gbDest.SuspendLayout();
-            this.gbPasswordConfirm.SuspendLayout();
+            this.gbNewPassword.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.epPassword)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,14 +77,14 @@
             this.gbPaths.Margin = new System.Windows.Forms.Padding(4);
             this.gbPaths.Name = "gbPaths";
             this.gbPaths.Padding = new System.Windows.Forms.Padding(4);
-            this.gbPaths.Size = new System.Drawing.Size(539, 186);
+            this.gbPaths.Size = new System.Drawing.Size(539, 92);
             this.gbPaths.TabIndex = 0;
             this.gbPaths.TabStop = false;
             this.gbPaths.Text = "Paths";
             // 
             // btnRemovePath
             // 
-            this.btnRemovePath.Location = new System.Drawing.Point(430, 97);
+            this.btnRemovePath.Location = new System.Drawing.Point(429, 58);
             this.btnRemovePath.Margin = new System.Windows.Forms.Padding(4);
             this.btnRemovePath.Name = "btnRemovePath";
             this.btnRemovePath.Size = new System.Drawing.Size(100, 28);
@@ -91,7 +95,7 @@
             // 
             // btnAddFolder
             // 
-            this.btnAddFolder.Location = new System.Drawing.Point(117, 97);
+            this.btnAddFolder.Location = new System.Drawing.Point(116, 58);
             this.btnAddFolder.Margin = new System.Windows.Forms.Padding(4);
             this.btnAddFolder.Name = "btnAddFolder";
             this.btnAddFolder.Size = new System.Drawing.Size(100, 28);
@@ -102,7 +106,7 @@
             // 
             // btnAddFile
             // 
-            this.btnAddFile.Location = new System.Drawing.Point(9, 97);
+            this.btnAddFile.Location = new System.Drawing.Point(8, 58);
             this.btnAddFile.Margin = new System.Windows.Forms.Padding(4);
             this.btnAddFile.Name = "btnAddFile";
             this.btnAddFile.Size = new System.Drawing.Size(100, 28);
@@ -120,7 +124,7 @@
             this.lstPaths.Location = new System.Drawing.Point(8, 23);
             this.lstPaths.Margin = new System.Windows.Forms.Padding(4);
             this.lstPaths.Name = "lstPaths";
-            this.lstPaths.Size = new System.Drawing.Size(521, 68);
+            this.lstPaths.Size = new System.Drawing.Size(521, 36);
             this.lstPaths.TabIndex = 0;
             this.lstPaths.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstPaths_DragDrop);
             this.lstPaths.DragEnter += new System.Windows.Forms.DragEventHandler(this.lstPaths_DragEnter);
@@ -132,11 +136,11 @@
             this.gbOptions.Controls.Add(this.lstExts);
             this.gbOptions.Controls.Add(this.chkSubFolders);
             this.gbOptions.Controls.Add(this.chkDeleteOrg);
-            this.gbOptions.Location = new System.Drawing.Point(16, 198);
+            this.gbOptions.Location = new System.Drawing.Point(16, 154);
             this.gbOptions.Margin = new System.Windows.Forms.Padding(4);
             this.gbOptions.Name = "gbOptions";
             this.gbOptions.Padding = new System.Windows.Forms.Padding(4);
-            this.gbOptions.Size = new System.Drawing.Size(539, 69);
+            this.gbOptions.Size = new System.Drawing.Size(539, 74);
             this.gbOptions.TabIndex = 2;
             this.gbOptions.TabStop = false;
             this.gbOptions.Text = "Options";
@@ -204,25 +208,26 @@
             // 
             // gbPassword
             // 
+            this.gbPassword.Controls.Add(this.chkChangePassword);
+            this.gbPassword.Controls.Add(this.txtPasswordConfirm);
             this.gbPassword.Controls.Add(this.txtPassword);
-            this.gbPassword.Location = new System.Drawing.Point(16, 274);
+            this.gbPassword.Location = new System.Drawing.Point(16, 236);
             this.gbPassword.Margin = new System.Windows.Forms.Padding(4);
             this.gbPassword.Name = "gbPassword";
             this.gbPassword.Padding = new System.Windows.Forms.Padding(4, 4, 20, 4);
-            this.gbPassword.Size = new System.Drawing.Size(539, 59);
+            this.gbPassword.Size = new System.Drawing.Size(539, 80);
             this.gbPassword.TabIndex = 3;
             this.gbPassword.TabStop = false;
-            this.gbPassword.Text = "Password";
+            this.gbPassword.Text = "Password and Password Confirm";
             // 
             // txtPassword
             // 
-            this.txtPassword.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPassword.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
             this.txtPassword.Location = new System.Drawing.Point(4, 19);
             this.txtPassword.Margin = new System.Windows.Forms.Padding(4);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(515, 32);
+            this.txtPassword.Size = new System.Drawing.Size(240, 32);
             this.txtPassword.TabIndex = 0;
             this.txtPassword.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtPassword.TextChanged += new System.EventHandler(this.TxtPassword_TextChanged);
@@ -231,10 +236,10 @@
             // 
             this.btnEncrypt.Enabled = false;
             this.btnEncrypt.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold);
-            this.btnEncrypt.Location = new System.Drawing.Point(16, 408);
+            this.btnEncrypt.Location = new System.Drawing.Point(20, 410);
             this.btnEncrypt.Margin = new System.Windows.Forms.Padding(4);
             this.btnEncrypt.Name = "btnEncrypt";
-            this.btnEncrypt.Size = new System.Drawing.Size(135, 40);
+            this.btnEncrypt.Size = new System.Drawing.Size(135, 38);
             this.btnEncrypt.TabIndex = 5;
             this.btnEncrypt.Text = "Encrypt";
             this.btnEncrypt.UseVisualStyleBackColor = true;
@@ -244,10 +249,10 @@
             // 
             this.btnDecrypt.Enabled = false;
             this.btnDecrypt.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold);
-            this.btnDecrypt.Location = new System.Drawing.Point(158, 408);
+            this.btnDecrypt.Location = new System.Drawing.Point(163, 410);
             this.btnDecrypt.Margin = new System.Windows.Forms.Padding(4);
             this.btnDecrypt.Name = "btnDecrypt";
-            this.btnDecrypt.Size = new System.Drawing.Size(124, 40);
+            this.btnDecrypt.Size = new System.Drawing.Size(124, 38);
             this.btnDecrypt.TabIndex = 6;
             this.btnDecrypt.Text = "Decrypt";
             this.btnDecrypt.UseVisualStyleBackColor = true;
@@ -303,7 +308,7 @@
             // gbDest
             // 
             this.gbDest.Controls.Add(this.txtDest);
-            this.gbDest.Location = new System.Drawing.Point(16, 140);
+            this.gbDest.Location = new System.Drawing.Point(16, 106);
             this.gbDest.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gbDest.Name = "gbDest";
             this.gbDest.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -317,37 +322,39 @@
             // 
             this.btnDecryptAndOpen.Enabled = false;
             this.btnDecryptAndOpen.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDecryptAndOpen.Location = new System.Drawing.Point(288, 408);
+            this.btnDecryptAndOpen.Location = new System.Drawing.Point(294, 413);
             this.btnDecryptAndOpen.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnDecryptAndOpen.Name = "btnDecryptAndOpen";
-            this.btnDecryptAndOpen.Size = new System.Drawing.Size(263, 41);
+            this.btnDecryptAndOpen.Size = new System.Drawing.Size(263, 35);
             this.btnDecryptAndOpen.TabIndex = 7;
             this.btnDecryptAndOpen.Text = "Decrypt and Open A File";
             this.btnDecryptAndOpen.UseVisualStyleBackColor = true;
             this.btnDecryptAndOpen.Click += new System.EventHandler(this.btnDecryptAndOpen_Click);
             // 
-            // gbPasswordConfirm
+            // gbNewPassword
             // 
-            this.gbPasswordConfirm.Controls.Add(this.txtPasswordConfirm);
-            this.gbPasswordConfirm.Location = new System.Drawing.Point(16, 333);
-            this.gbPasswordConfirm.Margin = new System.Windows.Forms.Padding(4);
-            this.gbPasswordConfirm.Name = "gbPasswordConfirm";
-            this.gbPasswordConfirm.Padding = new System.Windows.Forms.Padding(4, 4, 20, 4);
-            this.gbPasswordConfirm.Size = new System.Drawing.Size(539, 59);
-            this.gbPasswordConfirm.TabIndex = 4;
-            this.gbPasswordConfirm.TabStop = false;
-            this.gbPasswordConfirm.Text = "Password Confirm";
+            this.gbNewPassword.Controls.Add(this.btnChangePassword);
+            this.gbNewPassword.Controls.Add(this.txtNewPasswordConfirm);
+            this.gbNewPassword.Controls.Add(this.txtNewPassword);
+            this.gbNewPassword.Enabled = false;
+            this.gbNewPassword.Location = new System.Drawing.Point(16, 324);
+            this.gbNewPassword.Margin = new System.Windows.Forms.Padding(4);
+            this.gbNewPassword.Name = "gbNewPassword";
+            this.gbNewPassword.Padding = new System.Windows.Forms.Padding(4, 4, 20, 4);
+            this.gbNewPassword.Size = new System.Drawing.Size(539, 90);
+            this.gbNewPassword.TabIndex = 4;
+            this.gbNewPassword.TabStop = false;
+            this.gbNewPassword.Text = "New Password and New Password Confirm";
             // 
             // txtPasswordConfirm
             // 
-            this.txtPasswordConfirm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtPasswordConfirm.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
-            this.txtPasswordConfirm.Location = new System.Drawing.Point(4, 19);
+            this.txtPasswordConfirm.Location = new System.Drawing.Point(277, 19);
             this.txtPasswordConfirm.Margin = new System.Windows.Forms.Padding(4);
             this.txtPasswordConfirm.Name = "txtPasswordConfirm";
             this.txtPasswordConfirm.PasswordChar = '*';
-            this.txtPasswordConfirm.Size = new System.Drawing.Size(515, 32);
-            this.txtPasswordConfirm.TabIndex = 0;
+            this.txtPasswordConfirm.Size = new System.Drawing.Size(242, 32);
+            this.txtPasswordConfirm.TabIndex = 1;
             this.txtPasswordConfirm.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtPasswordConfirm.TextChanged += new System.EventHandler(this.TxtPasswordConfirm_TextChanged);
             // 
@@ -355,13 +362,59 @@
             // 
             this.epPassword.ContainerControl = this;
             // 
+            // txtNewPasswordConfirm
+            // 
+            this.txtNewPasswordConfirm.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
+            this.txtNewPasswordConfirm.Location = new System.Drawing.Point(277, 19);
+            this.txtNewPasswordConfirm.Margin = new System.Windows.Forms.Padding(4);
+            this.txtNewPasswordConfirm.Name = "txtNewPasswordConfirm";
+            this.txtNewPasswordConfirm.PasswordChar = '*';
+            this.txtNewPasswordConfirm.Size = new System.Drawing.Size(242, 32);
+            this.txtNewPasswordConfirm.TabIndex = 1;
+            this.txtNewPasswordConfirm.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // txtNewPassword
+            // 
+            this.txtNewPassword.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
+            this.txtNewPassword.Location = new System.Drawing.Point(4, 19);
+            this.txtNewPassword.Margin = new System.Windows.Forms.Padding(4);
+            this.txtNewPassword.Name = "txtNewPassword";
+            this.txtNewPassword.PasswordChar = '*';
+            this.txtNewPassword.Size = new System.Drawing.Size(240, 32);
+            this.txtNewPassword.TabIndex = 0;
+            this.txtNewPassword.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // chkChangePassword
+            // 
+            this.chkChangePassword.AutoSize = true;
+            this.chkChangePassword.Location = new System.Drawing.Point(8, 59);
+            this.chkChangePassword.Margin = new System.Windows.Forms.Padding(4);
+            this.chkChangePassword.Name = "chkChangePassword";
+            this.chkChangePassword.Size = new System.Drawing.Size(144, 21);
+            this.chkChangePassword.TabIndex = 2;
+            this.chkChangePassword.Text = "Change Password";
+            this.chkChangePassword.UseVisualStyleBackColor = true;
+            this.chkChangePassword.CheckedChanged += new System.EventHandler(this.ChkChangePassword_CheckedChanged);
+            // 
+            // btnChangePassword
+            // 
+            this.btnChangePassword.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold);
+            this.btnChangePassword.Location = new System.Drawing.Point(4, 58);
+            this.btnChangePassword.Margin = new System.Windows.Forms.Padding(4);
+            this.btnChangePassword.Name = "btnChangePassword";
+            this.btnChangePassword.Size = new System.Drawing.Size(240, 32);
+            this.btnChangePassword.TabIndex = 2;
+            this.btnChangePassword.Text = "Change Password";
+            this.btnChangePassword.UseVisualStyleBackColor = true;
+            this.btnChangePassword.Click += new System.EventHandler(this.BtnChangePassword_Click);
+            // 
             // MainWindow
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(571, 581);
-            this.Controls.Add(this.gbPasswordConfirm);
+            this.Controls.Add(this.gbNewPassword);
             this.Controls.Add(this.btnDecryptAndOpen);
             this.Controls.Add(this.gbDest);
             this.Controls.Add(this.gbLog);
@@ -387,8 +440,8 @@
             this.gbLog.PerformLayout();
             this.gbDest.ResumeLayout(false);
             this.gbDest.PerformLayout();
-            this.gbPasswordConfirm.ResumeLayout(false);
-            this.gbPasswordConfirm.PerformLayout();
+            this.gbNewPassword.ResumeLayout(false);
+            this.gbNewPassword.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.epPassword)).EndInit();
             this.ResumeLayout(false);
 
@@ -417,9 +470,13 @@
         private System.Windows.Forms.GroupBox gbDest;
         private System.Windows.Forms.TextBox txtDest;
         private System.Windows.Forms.Button btnDecryptAndOpen;
-        private System.Windows.Forms.GroupBox gbPasswordConfirm;
+        private System.Windows.Forms.GroupBox gbNewPassword;
         private System.Windows.Forms.TextBox txtPasswordConfirm;
         private System.Windows.Forms.ErrorProvider epPassword;
+        private System.Windows.Forms.TextBox txtNewPasswordConfirm;
+        private System.Windows.Forms.TextBox txtNewPassword;
+        private System.Windows.Forms.CheckBox chkChangePassword;
+        private System.Windows.Forms.Button btnChangePassword;
     }
 }
 

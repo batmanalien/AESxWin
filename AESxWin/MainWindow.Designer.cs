@@ -262,7 +262,7 @@
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Size = new System.Drawing.Size(571, 25);
             this.lblInfo.TabIndex = 9;
-            this.lblInfo.Text = "https://github.com/batmanalien";
+            this.lblInfo.Text = "v2.1";
             this.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblInfo.Click += new System.EventHandler(this.lblInfo_Click);
             // 

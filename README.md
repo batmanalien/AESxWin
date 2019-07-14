@@ -8,7 +8,7 @@ I'm using the [C# implementation](https://github.com/kenkendk/sharpaescrypt) of 
 
 **Screenshot :**
 
-![AESxWin Main Window](https://i.imgur.com/PXWxCfm.png)
+![AESxWin Main Window](https://i.imgur.com/SvnnKxQ.png)
 
 ## [Download Now](https://github.com/EslaMx7/AESxWin/releases)  (**For Testing Or Personal Use Only, Not Production Ready !**)
 ([.NET Framework 4.5](https://www.microsoft.com/en-us/download/details.aspx?id=30653) required)

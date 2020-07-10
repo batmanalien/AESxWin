@@ -45,6 +45,7 @@
             this.chkChangePassword = new System.Windows.Forms.CheckBox();
             this.txtPasswordConfirm = new System.Windows.Forms.TextBox();
             this.txtPassword = new System.Windows.Forms.TextBox();
+            this.cmsFillPasword = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnEncrypt = new System.Windows.Forms.Button();
             this.btnDecrypt = new System.Windows.Forms.Button();
             this.lblInfo = new System.Windows.Forms.Label();
@@ -58,9 +59,12 @@
             this.txtNewPasswordConfirm = new System.Windows.Forms.TextBox();
             this.txtNewPassword = new System.Windows.Forms.TextBox();
             this.epPassword = new System.Windows.Forms.ErrorProvider(this.components);
+            this.fillEnvironmentVariablePasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setEnvironmentVariablePasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbPaths.SuspendLayout();
             this.gbOptions.SuspendLayout();
             this.gbPassword.SuspendLayout();
+            this.cmsFillPasword.SuspendLayout();
             this.gbLog.SuspendLayout();
             this.gbDest.SuspendLayout();
             this.gbNewPassword.SuspendLayout();
@@ -246,6 +250,7 @@
             // 
             // txtPassword
             // 
+            this.txtPassword.ContextMenuStrip = this.cmsFillPasword;
             this.txtPassword.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
             this.txtPassword.Location = new System.Drawing.Point(4, 19);
             this.txtPassword.Margin = new System.Windows.Forms.Padding(4);
@@ -255,6 +260,15 @@
             this.txtPassword.TabIndex = 0;
             this.txtPassword.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtPassword.TextChanged += new System.EventHandler(this.TxtPassword_TextChanged);
+            // 
+            // cmsFillPasword
+            // 
+            this.cmsFillPasword.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.cmsFillPasword.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fillEnvironmentVariablePasswordToolStripMenuItem,
+            this.setEnvironmentVariablePasswordToolStripMenuItem});
+            this.cmsFillPasword.Name = "cmsFillPasword";
+            this.cmsFillPasword.Size = new System.Drawing.Size(310, 80);
             // 
             // btnEncrypt
             // 
@@ -360,7 +374,6 @@
             this.gbNewPassword.Controls.Add(this.btnChangePassword);
             this.gbNewPassword.Controls.Add(this.txtNewPasswordConfirm);
             this.gbNewPassword.Controls.Add(this.txtNewPassword);
-            this.gbNewPassword.Enabled = false;
             this.gbNewPassword.Location = new System.Drawing.Point(16, 324);
             this.gbNewPassword.Margin = new System.Windows.Forms.Padding(4);
             this.gbNewPassword.Name = "gbNewPassword";
@@ -369,6 +382,7 @@
             this.gbNewPassword.TabIndex = 4;
             this.gbNewPassword.TabStop = false;
             this.gbNewPassword.Text = "New Password and New Password Confirm";
+            this.gbNewPassword.Visible = false;
             // 
             // btnChangePassword
             // 
@@ -408,6 +422,20 @@
             // 
             this.epPassword.ContainerControl = this;
             // 
+            // fillEnvironmentVariablePasswordToolStripMenuItem
+            // 
+            this.fillEnvironmentVariablePasswordToolStripMenuItem.Name = "fillEnvironmentVariablePasswordToolStripMenuItem";
+            this.fillEnvironmentVariablePasswordToolStripMenuItem.Size = new System.Drawing.Size(309, 24);
+            this.fillEnvironmentVariablePasswordToolStripMenuItem.Text = "Fill Environemnt Variable Password";
+            this.fillEnvironmentVariablePasswordToolStripMenuItem.Click += new System.EventHandler(this.fillEnvironmentVariablePasswordToolStripMenuItem_Click);
+            // 
+            // setEnvironmentVariablePasswordToolStripMenuItem
+            // 
+            this.setEnvironmentVariablePasswordToolStripMenuItem.Name = "setEnvironmentVariablePasswordToolStripMenuItem";
+            this.setEnvironmentVariablePasswordToolStripMenuItem.Size = new System.Drawing.Size(309, 24);
+            this.setEnvironmentVariablePasswordToolStripMenuItem.Text = "Set Environment Variable Password";
+            this.setEnvironmentVariablePasswordToolStripMenuItem.Click += new System.EventHandler(this.setEnvironmentVariablePasswordToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AllowDrop = true;
@@ -436,6 +464,7 @@
             this.gbOptions.PerformLayout();
             this.gbPassword.ResumeLayout(false);
             this.gbPassword.PerformLayout();
+            this.cmsFillPasword.ResumeLayout(false);
             this.gbLog.ResumeLayout(false);
             this.gbLog.PerformLayout();
             this.gbDest.ResumeLayout(false);
@@ -477,6 +506,9 @@
         private System.Windows.Forms.TextBox txtNewPassword;
         private System.Windows.Forms.CheckBox chkChangePassword;
         private System.Windows.Forms.Button btnChangePassword;
+        private System.Windows.Forms.ContextMenuStrip cmsFillPasword;
+        private System.Windows.Forms.ToolStripMenuItem fillEnvironmentVariablePasswordToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setEnvironmentVariablePasswordToolStripMenuItem;
     }
 }
 

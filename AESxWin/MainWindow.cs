@@ -456,7 +456,7 @@ namespace AESxWin
 
         private void ChkChangePassword_CheckedChanged(object sender, EventArgs e)
         {
-            gbNewPassword.Enabled = !gbNewPassword.Enabled;
+            gbNewPassword.Visible = !gbNewPassword.Visible;
         }
 
         private async void BtnChangePassword_Click(object sender, EventArgs e)
@@ -576,6 +576,25 @@ namespace AESxWin
             this.Log($"Finished : {count} File(s) Decrypted.");
 
 
+        }
+
+        private void setEnvironmentVariablePasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Please set AES_PASSWORD user environment variable to the password you want to use!");
+        }
+
+        private void fillEnvironmentVariablePasswordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string password = Environment.GetEnvironmentVariable("AES_PASSWORD", EnvironmentVariableTarget.User);
+            if (String.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("Please set AES_PASSWORD user environment variable to the password you want to use!");
+            }
+            else
+            {
+                txtPassword.Text = password;
+                txtPasswordConfirm.Text = password;
+            }
         }
     }
 }

@@ -268,7 +268,7 @@
             this.fillEnvironmentVariablePasswordToolStripMenuItem,
             this.setEnvironmentVariablePasswordToolStripMenuItem});
             this.cmsFillPasword.Name = "cmsFillPasword";
-            this.cmsFillPasword.Size = new System.Drawing.Size(310, 80);
+            this.cmsFillPasword.Size = new System.Drawing.Size(310, 52);
             // 
             // btnEncrypt
             // 
@@ -305,7 +305,7 @@
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Size = new System.Drawing.Size(571, 25);
             this.lblInfo.TabIndex = 9;
-            this.lblInfo.Text = "v2.2";
+            this.lblInfo.Text = "v2.3";
             this.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblInfo.Click += new System.EventHandler(this.lblInfo_Click);
             // 
